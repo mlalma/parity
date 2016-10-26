@@ -1,5 +1,6 @@
 package com.paritytrading.parity.system;
 
+import com.paritytrading.foundation.ASCII;
 import com.paritytrading.foundation.ByteArrays;
 import com.paritytrading.nassau.soupbintcp.SoupBinTCP;
 import com.paritytrading.nassau.soupbintcp.SoupBinTCPServer;
@@ -149,12 +150,12 @@ class Session implements Closeable, SoupBinTCPServerStatusListener, POEServerLis
 
         send(orderAccepted);
 
-        orderIds.add(message.orderId);
+        orderIds.add(ASCII.get(message.orderId));
     }
 
     public void orderRejected(POE.EnterOrder message, byte reason) {
         orderRejected.timestamp = timestamp();
-        orderRejected.orderId   = message.orderId;
+        System.arraycopy(orderRejected.orderId, 0, message.orderId, 0, POE.ORDER_ID_LENGTH);
         orderRejected.reason    = reason;
 
         send(orderRejected);
@@ -163,7 +164,7 @@ class Session implements Closeable, SoupBinTCPServerStatusListener, POEServerLis
     public void orderExecuted(long price, long quantity, byte liquidityFlag,
             long matchNumber, Order order) {
         orderExecuted.timestamp     = timestamp();
-        orderExecuted.orderId       = order.getOrderId();
+        ASCII.putLeft(orderExecuted.orderId, order.getOrderId());
         orderExecuted.quantity      = quantity;
         orderExecuted.price         = price;
         orderExecuted.liquidityFlag = liquidityFlag;
@@ -174,7 +175,7 @@ class Session implements Closeable, SoupBinTCPServerStatusListener, POEServerLis
 
     public void orderCanceled(long canceledQuantity, byte reason, Order order) {
         orderCanceled.timestamp        = timestamp();
-        orderCanceled.orderId          = order.getOrderId();
+        ASCII.putLeft(orderCanceled.orderId, order.getOrderId());
         orderCanceled.canceledQuantity = canceledQuantity;
         orderCanceled.reason           = reason;
 

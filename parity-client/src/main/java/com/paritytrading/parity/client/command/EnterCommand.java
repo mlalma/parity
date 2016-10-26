@@ -36,7 +36,7 @@ class EnterCommand implements Command {
     }
 
     private void execute(TerminalClient client, long quantity, long instrument, long price) throws IOException {
-        message.orderId    = client.getOrderIdGenerator().next();
+        ASCII.putLeft(message.orderId, client.getOrderIdGenerator().next());
         message.quantity   = quantity;
         message.instrument = instrument;
         message.price      = price;

@@ -58,7 +58,7 @@ class MatchingEngine {
 
         long orderNumber = nextOrderNumber++;
 
-        handling = new Order(message.orderId, orderNumber, session, book);
+        handling = new Order(ASCII.get(message.orderId), orderNumber, session, book);
 
         instrument = message.instrument;
 
