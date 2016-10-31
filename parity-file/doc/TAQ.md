@@ -25,6 +25,9 @@ Timestamps are represented as `HH:MM:SS.SSS` (ISO 8601).
 
 Prices are represented as decimal numbers using decimal point.
 
+Sizes are represented either as integers or as decimal numbers using decimal
+point.
+
 
 Records
 -------
